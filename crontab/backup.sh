@@ -10,10 +10,10 @@ Backup_Files_Will_Be_Storage_At="/home/backup/"
 MySQL_Dump="/usr/local/mysql/bin/mysqldump"
 
 # Set Directory you want to backup #
-Backup_Dir=("/root/server.log" "/root/players" "/root/plugins" "/root/worlds")
+Backup_Dir=("/path/to/backup/file")
 
 # Set MySQL Database you want to backup #
-Backup_Database=("wiki" "lemonwp")
+Backup_Database=("backupDatabase")
 
 # Set MySQL Username and Password #
 MYSQL_Username='yourMysqlUsernameHere'
@@ -21,7 +21,7 @@ MYSQL_Password='yourMysqlPasswordHere'
 
 # FTP Backup Toggle #
 Enable_FTP=1
-# 0: Enable; 1: Disable
+# 0: Enable; 1: Disable #
 
 # Set FTP Login Information #
 FTP_Host=''
@@ -48,11 +48,11 @@ Backup_Dir()
 }
 Backup_Sql()
 {
-    ${MySQL_Dump} -u$MYSQL_UserName -p$MYSQL_PassWord $1 > ${Backup_Files_Will_Be_Storage_At}db-$1-$(date +"%Y%m%d").sql
+    ${MySQL_Dump} -u$MYSQL_Username -p$MYSQL_Password $1 > ${Backup_Files_Will_Be_Storage_At}db-$1-$(date +"%Y%m%d").sql
 }
 
 if [ ! -f ${MySQL_Dump} ]; then  
-    echo "mysqldump command not found.please check your setting."
+    echo "backup: mysqldump command not found. Please check your setting."
     exit 1
 fi
 
@@ -60,9 +60,9 @@ if [ ! -d ${Backup_Files_Will_Be_Storage_At} ]; then
     mkdir -p ${Backup_Files_Will_Be_Storage_At}
 fi
 
-type lftp >/dev/null 2>&1 || { echo >&2 "lftp command not found. Install: centos:yum install lftp,debian/ubuntu:apt-get install lftp."; }
+type lftp >/dev/null 2>&1 || { echo >&2 "backup: lftp command not found. To install lftp: CentOS: yum install lftp ; Debian/Ubuntu: apt-get install lftp."; }
 
-echo "Backup website files..."
+echo "Backup files..."
 for dd in ${Backup_Dir[@]};do
     Backup_Dir ${dd}
 done
@@ -88,5 +88,5 @@ mput ${TodayDBBackup}
 bye
 EOF
 
-echo "complete."
+echo "Backup complete."
 fi
