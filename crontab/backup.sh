@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Funciont: Backup website files and MySQL database
+# Function: Backup website files and MySQL database
 # Author: licess
 # Website: http://www.lnmp.org/ and Galvin Gao edited.
 
